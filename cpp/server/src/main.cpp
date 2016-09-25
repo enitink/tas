@@ -12,11 +12,25 @@
 #include <string>
 #include <asio.hpp>
 #include "server.hpp"
+#include <unordered_map>
+#include <set>
+#include <vector>
 
 using namespace std;
+using namespace boost;
+
+typedef struct
+{
+	int vecDocCounter;
+	int wordposition;
+}vecdata;
+
 bool getPage(char*, string&); //defined in ../../client/src/curlssl.cpp
 bool prepareLineDocs(string&); //defined in  ../../dsalog/src/parser.cpp
 vector<string>& getParsedLineDocVector(); //defined in  ../../dsalog/src/parser.cpp
+void prepareIndex(vector<string>&);
+unordered_map<string, vector<vecdata> >&  getindexedmap();
+vector<int>& search(string& input, unordered_map<string, vector<vecdata> >& haystack);
 
 int main(int argc, char* argv[])
 {
@@ -29,8 +43,15 @@ int main(int argc, char* argv[])
 	prepareLineDocs(htmlpage);
 	vector<string>& vec = getParsedLineDocVector();
 
-	for (vector<string>::iterator it = vec.begin(); it != vec.end(); ++it)
-		cout << *it << endl; 
+	/*for (vector<string>::iterator it = vec.begin(); it != vec.end(); ++it)
+		cout << *it << endl;*/
+
+	prepareIndex(vec);
+	unordered_map<string, vector<vecdata> >& lindex = getindexedmap();
+	
+	string sh("List of winners");
+	vector<int>& res = search(sh, lindex);
+
 	try
 	{
 		// Check command line arguments.

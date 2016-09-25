@@ -6,18 +6,21 @@
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/erase.hpp>
+#include <boost/tokenizer.hpp>
 
 using namespace std;
-using namespace boost::algorithm;
+using namespace boost;
 
 string currline;
-vector<string> parsedVector;
+string currtag;
+bool isClosed = true;
 
+vector<string> parsedVector;
 set<string> linelist;
 void filllinelist()
 {
-	string list[] = {"p", "tr", "h1", "h2", "h3", "h4", "h5", "h6", "title", "li"};
-	linelist.insert(list, list + 10);
+	string list[] = {"p", "a", "tr", "h1", "h2", "h3", "h4", "h5", "h6", "title", "li"};
+	linelist.insert(list, list + 11);
 }
 
 void characters_callback(void * ctx, const xmlChar * ch, int len)
@@ -34,17 +37,32 @@ void characters_callback(void * ctx, const xmlChar * ch, int len)
 void start_element_callback(void *user_data, const xmlChar *name, const xmlChar **attrs) {
 	string n((const char*)name);
 	transform(n.begin(), n.end(), n.begin(), ::tolower);
-	if (linelist.find(n) != linelist.end())
+	if (linelist.find(n) != linelist.end() && isClosed)
+	{
 		currline = "";
+		currtag = n;
+		isClosed = false;
+	}
 }
 
 void end_element_callback(void * ctx, const xmlChar * name)
 {
 	string n((const char*)name);
-	if (linelist.find(n) != linelist.end())
+	transform(n.begin(), n.end(), n.begin(), ::tolower);
+	if ((linelist.find(n) != linelist.end()) && (currtag == n))
 	{
-		//printf("%s\n", currline.c_str());
-		parsedVector.push_back(currline);
+		isClosed = true;
+		std::size_t found = currline.find('.');
+		if (found!=std::string::npos)
+		{
+			char_separator<char> sep(".");
+			tokenizer<char_separator<char> > tok(currline,sep);
+			for(tokenizer<char_separator<char> >::iterator beg=tok.begin(); beg!=tok.end();++beg){
+				parsedVector.push_back(*beg);
+			}
+		}
+		else
+			parsedVector.push_back(currline);
 	}
 }
 

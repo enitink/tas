@@ -8,4 +8,6 @@ AM_CPPFLAGS =\
 noinst_LIBRARIES= libDsAlgo.a
 
 libDsAlgo_a_SOURCES = algo.cpp \
-						parser.cpp
+						parser.cpp \
+						prepareindex.cpp \
+						searchterm.cpp
