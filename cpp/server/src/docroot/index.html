@@ -1,0 +1,52 @@
+<HTML>
+   <HEAD>
+      <TITLE>TAS Search Nitin</TITLE>
+   </HEAD>
+   <BODY text=#000000 vLink=#551a8b aLink=#ff0000 link=#0000cc bgColor=#ffffff> 
+      <CENTER>
+         <BR>
+         <FORM name=f action=/search>
+            <TABLE cellSpacing=0 cellPadding=0>
+               <TBODY>
+                  <TR>
+                     <TD width=75>&nbsp;</TD>
+                     <TD align=middle>
+						<SPAN id=hf></SPAN>
+						<INPUT maxLength=256 size=55 name=q><BR>
+						<INPUT onClick="buttonFunction()" value="Search" name=btnG>
+                     </TD>
+                  </TR>
+               </TBODY>
+            </TABLE>
+         </FORM>
+         <BR><BR>
+      </CENTER>
+	  <div id="id01"></div>
+
+	  <script>
+	  function buttonFunction(){
+		  var xmlhttp = new XMLHttpRequest();
+		  var url = "/search";
+
+		  xmlhttp.onreadystatechange = function() {
+			  if (this.readyState == 4 && this.status == 200) {
+				  var myArr = JSON.parse(this.responseText);
+				  myFunction(myArr);
+			  }
+		  };
+		  xmlhttp.open("GET", url, true);
+		  xmlhttp.send();
+	  }
+		function myFunction(arr) {
+			var out = "";
+			var i;
+			for(i = 0; i < arr.length; i++) {
+				out += '<a href="' + arr[i].url + '">' +
+					arr[i].display + '</a><br>';
+			}
+			document.getElementById("id01").innerHTML = out;
+		}
+	   </script>
+
+</BODY>
+</HTML>

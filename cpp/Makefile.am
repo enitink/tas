@@ -1,0 +1,1 @@
+SUBDIRS = client dsalgo server 
