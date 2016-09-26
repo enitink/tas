@@ -26,8 +26,7 @@
 	  <script>
 	  function buttonFunction(){
 		  var xmlhttp = new XMLHttpRequest();
-		  //var url = "/search?q=" + document.getElementById("ques").val();
-		  var url = "/search?q=Amit";
+		  var url = "/search?q=" + document.getElementById("ques").value;
 
 		  xmlhttp.onreadystatechange = function() {
 			  if (this.readyState == 4 && this.status == 200) {
@@ -41,6 +40,7 @@
 		function myFunction(arr) {
 			var out = "";
 			var i;
+			out += '<h1><center/>' + arr.length + ' Record(s) found</h1>'
 			for(i = 0; i < arr.length; i++) {
 				out += (i+1) + ": " + arr[i].display + '<br>';
 			}
