@@ -28,7 +28,7 @@ bool getPage(char* page, string& output)
 	std::ostringstream stream;
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &stream);
-    curl_easy_setopt(curl, CURLOPT_URL, "http://en.wikipedia.org/wiki/Filmfare_Award_for_Best_Actor");
+    curl_easy_setopt(curl, CURLOPT_URL, page);
 
 #ifdef SKIP_PEER_VERIFICATION
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
