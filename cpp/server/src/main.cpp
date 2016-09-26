@@ -13,24 +13,19 @@
 #include <asio.hpp>
 #include "server.hpp"
 #include <unordered_map>
+#include <map>
 #include <set>
 #include <vector>
 
 using namespace std;
 using namespace boost;
 
-typedef struct
-{
-	int vecDocCounter;
-	int wordposition;
-}vecdata;
-
 bool getPage(char*, string&); //defined in ../../client/src/curlssl.cpp
 bool prepareLineDocs(string&); //defined in  ../../dsalog/src/parser.cpp
 vector<string>& getParsedLineDocVector(); //defined in  ../../dsalog/src/parser.cpp
 void prepareIndex(vector<string>&);
-unordered_map<string, vector<vecdata> >&  getindexedmap();
-vector<int>& search(string& input, unordered_map<string, vector<vecdata> >& haystack);
+unordered_map<string, map<int,int> >&  getindexedmap();
+vector<int>& search(string& input, unordered_map<string, map<int, int> >& haystack);
 
 int main(int argc, char* argv[])
 {
@@ -47,11 +42,14 @@ int main(int argc, char* argv[])
 		cout << *it << endl;*/
 
 	prepareIndex(vec);
-	unordered_map<string, vector<vecdata> >& lindex = getindexedmap();
+	//unordered_map<string, map<int, int> >& lindex = getindexedmap();
 	
-	string sh("List of winners");
+	/*string sh("List of winners");
 	vector<int>& res = search(sh, lindex);
-
+	cout << "Result " << res.size() << endl;
+	for(auto& x : res)
+		cout << vec[x] << endl;*/
+	cout << "Server is ready!!" << endl;
 	try
 	{
 		// Check command line arguments.

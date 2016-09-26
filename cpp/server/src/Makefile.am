@@ -18,7 +18,7 @@ libServer_a_SOURCES = \
 
 server_SOURCES = main.cpp
 server_LDADD = \
+	./libServer.a \
 	../../client/src/libHttpClient.a \
 	../../dsalgo/src/libDsAlgo.a \
-	./libServer.a \
 	-lcurl -lxml2 -lz -lpthread

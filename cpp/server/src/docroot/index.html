@@ -12,7 +12,7 @@
                      <TD width=75>&nbsp;</TD>
                      <TD align=middle>
 						<SPAN id=hf></SPAN>
-						<INPUT maxLength=256 size=55 name=q><BR>
+						<INPUT maxLength=256 size=55 id="ques"><BR>
 						<INPUT onClick="buttonFunction()" value="Search" name=btnG>
                      </TD>
                   </TR>
@@ -26,7 +26,8 @@
 	  <script>
 	  function buttonFunction(){
 		  var xmlhttp = new XMLHttpRequest();
-		  var url = "/search";
+		  //var url = "/search?q=" + document.getElementById("ques").val();
+		  var url = "/search?q=Amit";
 
 		  xmlhttp.onreadystatechange = function() {
 			  if (this.readyState == 4 && this.status == 200) {
@@ -41,8 +42,7 @@
 			var out = "";
 			var i;
 			for(i = 0; i < arr.length; i++) {
-				out += '<a href="' + arr[i].url + '">' +
-					arr[i].display + '</a><br>';
+				out += (i+1) + ": " + arr[i].display + '<br>';
 			}
 			document.getElementById("id01").innerHTML = out;
 		}

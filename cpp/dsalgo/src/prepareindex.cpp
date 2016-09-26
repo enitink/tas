@@ -1,18 +1,14 @@
 #include <string>
 #include <unordered_map>
+#include <map>
 #include <boost/tokenizer.hpp>
 #include <iostream>
+//#include <global.h>
 
 using namespace std;
 using namespace boost;
 
-typedef struct
-{
-	int vecDocCounter;
-	int wordposition;
-}vecdata;
-
-unordered_map<string, vector<vecdata> > indexedmap;
+unordered_map<string, map<int, int> > indexedmap;
 
 void prepareIndex(vector<string>& input)
 {
@@ -23,10 +19,7 @@ void prepareIndex(vector<string>& input)
 		int wordposition = 0;
 		for (tokenizer::iterator it = tok.begin(); it != tok.end(); ++it)
 		{
-			vecdata temp;
-			temp.vecDocCounter = i;
-			temp.wordposition = wordposition++;
-			indexedmap[*it].push_back(temp);
+			(indexedmap[*it])[i] = wordposition++;
 		}
 	}
 
@@ -38,7 +31,7 @@ void prepareIndex(vector<string>& input)
 	}*/
 }
 
-unordered_map<string, vector<vecdata> >&  getindexedmap()
+unordered_map<string, map<int, int> >&  getindexedmap()
 {
 	return indexedmap;
 }

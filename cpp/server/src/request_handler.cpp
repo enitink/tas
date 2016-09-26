@@ -15,6 +15,19 @@
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
+#include <iostream>
+#include <unordered_map>
+#include <map>
+#include <set>
+#include <vector>
+
+using namespace std;
+using namespace boost;
+
+unordered_map<string, map<int,int> >&  getindexedmap();
+vector<int>& search(string& input, unordered_map<string, map<int, int> >& haystack);
+vector<string>& getParsedLineDocVector(); //defined in  ../../dsalog/src/parser.cpp
+
 
 namespace http {
 namespace server {
@@ -79,12 +92,33 @@ void request_handler::handle_request(const request& req, reply& rep)
 	} 
 	else if( strncmp(request_path.c_str(), "/search", 7) == 0)
 	{
-		rep.content = "[ { \"display\": \"Nitin\", \"url\": \"localhost:8080/default.asp\" }, { \"display\": \"Kumar\", \"url\": \"http://www.w3schools.com/html/default.asp\" }, { \"display\": \"Sharma\", \"url\": \"http://www.w3schools.com/css/default.asp\" } ]"; 
+		//rep.content = /*"[ { \"display\": \"Nitin\", \"url\": \"localhost:8080/default.asp\" }, { \"display\": \"Kumar\", \"url\": \"http://www.w3schools.com/html/default.asp\" }, { \"display\": \"Sharma\", \"url\": \"http://www.w3schools.com/css/default.asp\" } ]";*/
+		//cout << "requsted path : " << request_path.c_str() << " uri : " << req.uri << endl;
+		string searchstr =(request_path.c_str()+10); 
+		cout << "searched: " << searchstr.c_str() << endl;
+
+		unordered_map<string, map<int, int> >& lindex = getindexedmap();
+		vector<int>& res = search(searchstr, lindex);
+		cout << "result with : " << res.size() << "outputs" << endl;
+		
+		rep.content = "";
+		bool first = true;
+		vector<string>& vec = getParsedLineDocVector();
+		for(auto& x: res)
+		{
+			if (rep.content.empty() == false)
+				rep.content += ",";
+			rep.content += string("{ \"display\": ") + string("\"") + vec[x] + string("\" }");
+		}
+
+		rep.content = "[" + rep.content + "]";
+
+		cout << "result : " << rep.content.c_str() << endl;
 		rep.headers.resize(2);
 		rep.headers[0].name = "Content-Length";
 		rep.headers[0].value = std::to_string(rep.content.size());
 		rep.headers[1].name = "Content-Type";
-		rep.headers[1].value = "txt"; //mime_types::extension_to_type();
+		rep.headers[1].value = "json"; //mime_types::extension_to_type();
 	}
 }
 
